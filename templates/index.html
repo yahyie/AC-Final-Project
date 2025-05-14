@@ -9,16 +9,21 @@
 {% block content %}
 <div class="container-fluid">
     <div class="row">
-        <div class="col-3 sidebar"></div>
+        <div class="col-3 sidebar">
+            <h1 class="py-4"><a class="text-light" href="{{ url_for('index')}}"><img class="title-icon" src="{{ url_for('static', filename='img/logo-lock.png') }}" alt="lock icon">CipherNest</a></h1>
+            <a class="sidebar-btn" href="#">XOR Cipher</a>
+            <a class="sidebar-btn" href="#">Caesar Cipher</a>
+            <a class="sidebar-btn" href="#">Block Cipher</a>
+        </div>
         <div class="col-9 mainpage pt-4 text-center">
             <br><br>
-            <h1 class="title"><img class="title-icon" src="{{ url_for('static', filename='img/logo-key.png') }}" alt="key-icon">WELCOME TO APPLIED CRYPTOGRAPHY!<img class="title-icon" src="{{ url_for('static', filename='img/logo-lock.png') }}" alt="key-icon"></h1>
+            <h1 class="title fw-bold"><img class="title-icon" src="{{ url_for('static', filename='img/logo-key.png') }}" alt="key icon">WELCOME TO APPLIED CRYPTOGRAPHY!<img class="title-icon" src="{{ url_for('static', filename='img/logo-lock.png') }}" alt="lock icon"></h1>
             <br>
             <div class="mx-5 px-4">
                 <p class="fs-5">Explore cryptographic algorithms interactively. Choose a cipher below to 
                 experiment with encryption, decryption, hashing, and key exchange concepts.</p>
             </div>
-            <div class="d-flex justify-content-center flex-wrap my-5 p-3">
+            <div class="d-flex justify-content-center flex-wrap py-4">
                 <div class="w-25 m-2">
                     <button class="btn btn-outline-light p-3 mx-2 border-3 rounded-4">XOR Cipher</button>
                     <p class="fs-5 p-3">Simple symmertric cipher using the XOR operation.</p>
