@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}{{ contents['title'] }}{% endblock title %}
+
+{% block style %}
+    <style>
+        {{ contents['id'] }} img {
+            display: inline;
+        }
+        {{ contents['id'] }} {
+            background-color: #5a6472;
+            color: #fb923c;
+            border-left: #fb923c 5px solid;
+            border-radius: 10px;
+        }
+    </style>
+{% endblock style %}
+
+{% block navbar %}
+    <div class="navbar mt-2 px-4 py-2">
+        <h3>{{contents['title']}} <span class="type">{{contents['type']}}</span></h3> 
+    </div>
+{% endblock navbar %}

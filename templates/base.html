@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
     <link rel="shortcut icon" href="{{ url_for('static', filename='img/icon-lock-orange.png') }}" type="image/x-icon">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
     <title>
         {% block title %}CipherNest{% endblock title %}
     </title>
@@ -12,18 +13,67 @@
     {% endblock style %}
 </head>
 <body>
-    {% block navbar %}
-
-    {% endblock navbar %}
-
     <div class="container-fluid">
         <div class="row">
             {% block sidebar %}
-
+                <div id="slidebar" class="p-4 text-center">
+                    <h1 class="align-items-center mb-4 d-flex justify-content-between">
+                        <a class="title text-light mt-0" href="/">CipherNest</a>
+                        <button class="btn text-light" id="retract-btn">&lt;</button>
+                    </h1>
+                    <a class="slidebar-btn d-flex align-items-center justify-content-between mb-2" id="caesar-cipher" href="/caesar-cipher">
+                        <p class="mb-0">Caesar Cipher</p>
+                        <img src="{{ url_for('static', filename='img/icon-lock.png') }}" alt="Lock Icon">
+                    </a>
+                    <a class="slidebar-btn d-flex align-items-center justify-content-between mb-2" id="vernam-cipher" href="/vernam-cipher">
+                        <p class="mb-0">Vernam Cipher</p>
+                        <img src="{{ url_for('static', filename='img/icon-lock.png') }}" alt="Lock Icon">
+                    </a>
+                    <a class="slidebar-btn d-flex align-items-center justify-content-between mb-2" id="block-cipher" href="/block-cipher">
+                        <p class="mb-0">Block Cipher</p>
+                        <img src="{{ url_for('static', filename='img/icon-lock.png') }}" alt="Lock Icon">
+                    </a>
+                    <a class="slidebar-btn d-flex align-items-center justify-content-between mb-2" id="rsa" href="/rsa">
+                        <p class="mb-0">RSA Cipher</p>
+                        <img src="{{ url_for('static', filename='img/icon-lock.png') }}" alt="Lock Icon">
+                    </a>
+                    <a class="slidebar-btn d-flex align-items-center justify-content-between mb-2" id="diffie-hellman" href="/diffie-hellman">
+                        <p class="mb-0">Diffie-Hellman</p>
+                        <img src="{{ url_for('static', filename='img/icon-lock.png') }}" alt="Lock Icon">
+                    </a>
+                    <a class="slidebar-btn d-flex align-items-center justify-content-between mb-2" id="md5" href="/md5">
+                        <p class="mb-0">MD5</p>
+                        <img src="{{ url_for('static', filename='img/icon-lock.png') }}" alt="Lock Icon">
+                    </a>
+                    <a class="slidebar-btn d-flex align-items-center justify-content-between mb-2" id="sha1" href="/sha1">
+                        <p class="mb-0">SHA-1</p>
+                        <img src="{{ url_for('static', filename='img/icon-lock.png') }}" alt="Lock Icon">
+                    </a>
+                    <a class="slidebar-btn d-flex align-items-center justify-content-between mb-2" id="sha256" href="/sha256">
+                        <p class="mb-0">SHA-256</p>
+                        <img src="{{ url_for('static', filename='img/icon-lock.png') }}" alt="Lock Icon">
+                    </a>
+                    <a class="slidebar-btn d-flex align-items-center justify-content-between mb-2" id="sha512" href="/sha512">
+                        <p class="mb-0">SHA-512</p>
+                        <img src="{{ url_for('static', filename='img/icon-lock.png') }}" alt="Lock Icon">
+                    </a>
+                </div>
             {% endblock sidebar %}
-            {% block mainpage %}{% endblock mainpage %}
+            {% block mainpage %}
+                <div id="main-content">
+                {% block navbar %}{% endblock navbar %}
+
+                </div>
+            {% endblock mainpage %}
         </div>
     </div>
+    <script>
+        document.getElementById('retract-btn').addEventListener('click', function() {
+            document.getElementById('slidebar').classList.toggle('collapsed');
+            document.getElementById('main-content').classList.toggle('expanded');
+            this.classList.toggle('collapsed');
+        });
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js" integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq" crossorigin="anonymous"></script>
 </body>
 </html>

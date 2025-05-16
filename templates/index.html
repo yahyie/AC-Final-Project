@@ -11,15 +11,15 @@
 {% block sidebar %}
 <div class="col-3 sidebar text-center">
     <h1 class="py-4"><a class="title" href="{{ url_for('index')}}"><img class="title-icon" src="{{ url_for('static', filename='img/icon-lock-orange.png') }}" alt="lock icon">CipherNest</a></h1>
-    <a class="sidebar-btn" href="#">Caesar Cipher</a>
-    <a class="sidebar-btn" href="#">Vernam Cipher</a>
-    <a class="sidebar-btn" href="#">Block Cipher</a>
-    <a class="sidebar-btn" href="#">RSA Cipher</a>
-    <a class="sidebar-btn" href="#">Diffie-Hellman</a>
-    <a class="sidebar-btn" href="#">MD5</a>
-    <a class="sidebar-btn" href="#">SHA-1</a>
-    <a class="sidebar-btn" href="#">SHA-256</a>
-    <a class="sidebar-btn" href="#">SHA-512</a>
+    <a class="sidebar-btn" href="/caesar-cipher">Caesar Cipher</a>
+    <a class="sidebar-btn" href="/vernam-cipher">Vernam Cipher</a>
+    <a class="sidebar-btn" href="/block-cipher">Block Cipher</a>
+    <a class="sidebar-btn" href="/rsa">RSA Cipher</a>
+    <a class="sidebar-btn" href="/diffie-hellman">Diffie-Hellman</a>
+    <a class="sidebar-btn" href="/md5">MD5</a>
+    <a class="sidebar-btn" href="/sha1">SHA-1</a>
+    <a class="sidebar-btn" href="/sha256">SHA-256</a>
+    <a class="sidebar-btn" href="/sha512">SHA-512</a>
 </div>
 {% endblock sidebar %}
 
@@ -36,15 +36,15 @@
     <h3 class="heading">Symmertric Encryption Algorithms</h3>
     <div class="d-flex justify-content-center flex-wrap py-4">
         <div class="w-25 m-2">
-            <button class="btn btn-outline-light p-3 mx-2 border-3 rounded-4">Caesar Cipher</button>
+            <a href="/caesar-cipher" class="btn btn-outline-light p-3 mx-2 border-3 rounded-4">Caesar Cipher</a>
             <p class="fs-5 p-3">An encryption algorithm that divides plaintext into fixed-size blocks and encrypts each block using a symmetric key.</p>
         </div>
         <div class="w-25 m-2">
-            <button class="btn btn-outline-light p-3 mx-2 border-3 rounded-4">Vernam Cipher</button>
+            <a href="/vernam-cipher" class="btn btn-outline-light p-3 mx-2 border-3 rounded-4">Vernam Cipher</a>
             <p class="fs-5 p-3">The Vernam cipher, also known as a one-time pad, is a method of encrypting alphabetic text using a substitution technique.</p>
         </div>
         <div class="w-25 m-2">
-            <button class="btn btn-outline-light p-3 mx-2 border-3 rounded-4">Block Cipher</button>
+            <a href="/block-cipher" class="btn btn-outline-light p-3 mx-2 border-3 rounded-4">Block Cipher</a>
             <p class="fs-5 p-3">A substitution cipher that shifts each letter in the plaintext by a fixed number of positions in the alphabet.</p>
         </div>
     </div>
@@ -52,11 +52,11 @@
     <h3 class="heading">Asymmertric Encryption Algorithms</h3>
     <div class="d-flex justify-content-center flex-wrap py-4">
         <div class="m-2" style="width: 40%;">
-            <button class="btn btn-outline-light p-3 mx-2 border-3 rounded-4">RSA Encryption</button>
+            <a href="/rsa" class="btn btn-outline-light p-3 mx-2 border-3 rounded-4">RSA Encryption</a>
             <p class="fs-5 p-3">A widely used asymmetric encryption algorithm that relies on the mathematical difficulty of factoring large prime numbers for secure data encryption and digital signatures.</p>
         </div>
         <div class="m-2" style="width: 40%;">
-            <button class="btn btn-outline-light p-3 mx-2 border-3 rounded-4">Diffie-Hellman</button>
+            <a href="/diffie-hellman" class="btn btn-outline-light p-3 mx-2 border-3 rounded-4">Diffie-Hellman</a>
             <p class="fs-5 p-3">An asymmetric key exchange protocol that allows two parties to securely generate a shared secret over an insecure communication channel without directly transmitting the key.</p>
         </div>
     </div>
@@ -64,19 +64,19 @@
     <h3 class="heading">Hashing Algorithms</h3>
     <div class="d-flex justify-content-center flex-wrap py-4">
         <div class="m-2" style="width: 20%;">
-            <button class="btn btn-outline-light p-3 mx-2 border-3 rounded-4">MD5</button>
+            <a href="/md5" class="btn btn-outline-light p-3 mx-2 border-3 rounded-4">MD5</a>
             <p class="fs-6 p-3">A widely-used cryptographic hash function that produces a 128-bit hash value, but is now considered insecure due to vulnerability to collision attacks.</p>
         </div>
         <div class="m-2" style="width: 20%;">
-            <button class="btn btn-outline-light p-3 mx-2 border-3 rounded-4">SHA-1</button>
+            <a href="/sha1" class="btn btn-outline-light p-3 mx-2 border-3 rounded-4">SHA-1</a>
             <p class="fs-6 p-3">Generates a 160-bit hash value and was commonly used in security protocols, but is deprecated because of weaknesses allowing for collision attacks.</p>
         </div>
         <div class="m-2" style="width: 20%;">
-            <button class="btn btn-outline-light p-3 mx-2 border-3 rounded-4">SHA-256</button>
+            <a href="/sha256" class="btn btn-outline-light p-3 mx-2 border-3 rounded-4">SHA-256</a>
             <p class="fs-6 p-3">A part of the SHA-2 family, producing a 256-bit hash, and is widely used for cryptographic security, offering strong resistance to collisions.</p>
         </div>
         <div class="m-2" style="width: 20%;">
-            <button class="btn btn-outline-light p-3 mx-2 border-3 rounded-4">SHA-512</button>
+            <a href="/sha512" class="btn btn-outline-light p-3 mx-2 border-3 rounded-4">SHA-512</a>
             <p class="fs-6 p-3">Another member of the SHA-2 family, producing a 512-bit hash value, and provides stronger security and greater resistance to attacks compared to SHA-256.</p>
         </div>
     </div>
