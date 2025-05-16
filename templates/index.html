@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 
+{% block title %}CipherNest | Home{% endblock title %}
+
 {% block style %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
 {% endblock style %}
@@ -8,7 +10,7 @@
 
 {% block sidebar %}
 <div class="col-3 sidebar text-center">
-    <h1 class="py-4"><a class="title" href="{{ url_for('index')}}"><img class="title-icon" src="{{ url_for('static', filename='img/icon-lock.png') }}" alt="lock icon">CipherNest</a></h1>
+    <h1 class="py-4"><a class="title" href="{{ url_for('index')}}"><img class="title-icon" src="{{ url_for('static', filename='img/icon-lock-orange.png') }}" alt="lock icon">CipherNest</a></h1>
     <a class="sidebar-btn" href="#">Caesar Cipher</a>
     <a class="sidebar-btn" href="#">Vernam Cipher</a>
     <a class="sidebar-btn" href="#">Block Cipher</a>
