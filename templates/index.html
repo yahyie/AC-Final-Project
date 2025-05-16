@@ -6,78 +6,77 @@
 
 {% block navbar %}{% endblock navbar %}
 
-{% block content %}
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-3 sidebar">
-            <h1 class="py-4"><a class="text-light" href="{{ url_for('index')}}"><img class="title-icon" src="{{ url_for('static', filename='img/logo-lock.png') }}" alt="lock icon">CipherNest</a></h1>
-            <a class="sidebar-btn" href="#">Caesar Cipher</a>
-            <a class="sidebar-btn" href="#">Vernam Cipher</a>
-            <a class="sidebar-btn" href="#">Block Cipher</a>
-            <a class="sidebar-btn" href="#">RSA Cipher</a>
-            <a class="sidebar-btn" href="#">Diffie-Hellman</a>
-            <a class="sidebar-btn" href="#">MD5</a>
-            <a class="sidebar-btn" href="#">SHA-1</a>
-            <a class="sidebar-btn" href="#">SHA-256</a>
-            <a class="sidebar-btn" href="#">SHA-512</a>
+{% block sidebar %}
+<div class="col-3 sidebar">
+    <h1 class="py-4"><a class="title" href="{{ url_for('index')}}"><img class="title-icon" src="{{ url_for('static', filename='img/icon-lock.png') }}" alt="lock icon">CipherNest</a></h1>
+    <a class="sidebar-btn" href="#">Caesar Cipher</a>
+    <a class="sidebar-btn" href="#">Vernam Cipher</a>
+    <a class="sidebar-btn" href="#">Block Cipher</a>
+    <a class="sidebar-btn" href="#">RSA Cipher</a>
+    <a class="sidebar-btn" href="#">Diffie-Hellman</a>
+    <a class="sidebar-btn" href="#">MD5</a>
+    <a class="sidebar-btn" href="#">SHA-1</a>
+    <a class="sidebar-btn" href="#">SHA-256</a>
+    <a class="sidebar-btn" href="#">SHA-512</a>
+</div>
+{% endblock sidebar %}
+
+{% block mainpage %}
+<div class="col-9 mainpage pt-4 text-center">
+    <br><br>
+    <h1 class="main-heading fw-bold"><img class="title-icon" src="{{ url_for('static', filename='img/icon-key.png') }}" alt="key icon">WELCOME TO APPLIED CRYPTOGRAPHY!<img class="title-icon" src="{{ url_for('static', filename='img/icon-lock.png') }}" alt="lock icon"></h1>
+    <br>
+    <div class="mx-5 px-4">
+        <p class="fs-5">Explore cryptographic algorithms interactively. Choose a cipher below to 
+        experiment with encryption, decryption, hashing, and key exchange concepts.</p>
+    </div>
+    <br>
+    <h3 class="heading">Symmertric Encryption Algorithms</h3>
+    <div class="d-flex justify-content-center flex-wrap py-4">
+        <div class="w-25 m-2">
+            <button class="btn btn-outline-light p-3 mx-2 border-3 rounded-4">Caesar Cipher</button>
+            <p class="fs-5 p-3">An encryption algorithm that divides plaintext into fixed-size blocks and encrypts each block using a symmetric key.</p>
         </div>
-        <div class="col-9 mainpage pt-4 text-center">
-            <br><br>
-            <h1 class="title fw-bold"><img class="title-icon" src="{{ url_for('static', filename='img/logo-key.png') }}" alt="key icon">WELCOME TO APPLIED CRYPTOGRAPHY!<img class="title-icon" src="{{ url_for('static', filename='img/logo-lock.png') }}" alt="lock icon"></h1>
-            <br>
-            <div class="mx-5 px-4">
-                <p class="fs-5">Explore cryptographic algorithms interactively. Choose a cipher below to 
-                experiment with encryption, decryption, hashing, and key exchange concepts.</p>
-            </div>
-            <br>
-            <h3 class="heading">Symmertric Encryption Algorithms</h3>
-            <div class="d-flex justify-content-center flex-wrap py-4">
-                <div class="w-25 m-2">
-                    <button class="btn btn-outline-light p-3 mx-2 border-3 rounded-4">Caesar Cipher</button>
-                    <p class="fs-5 p-3">An encryption algorithm that divides plaintext into fixed-size blocks and encrypts each block using a symmetric key.</p>
-                </div>
-                <div class="w-25 m-2">
-                    <button class="btn btn-outline-light p-3 mx-2 border-3 rounded-4">Vernam Cipher</button>
-                    <p class="fs-5 p-3">The Vernam cipher, also known as a one-time pad, is a method of encrypting alphabetic text using a substitution technique.</p>
-                </div>
-                <div class="w-25 m-2">
-                    <button class="btn btn-outline-light p-3 mx-2 border-3 rounded-4">Block Cipher</button>
-                    <p class="fs-5 p-3">A substitution cipher that shifts each letter in the plaintext by a fixed number of positions in the alphabet.</p>
-                </div>
-            </div>
-            <br>
-            <h3 class="heading">Asymmertric Encryption Algorithms</h3>
-            <div class="d-flex justify-content-center flex-wrap py-4">
-                <div class="m-2" style="width: 40%;">
-                    <button class="btn btn-outline-light p-3 mx-2 border-3 rounded-4">RSA Encryption</button>
-                    <p class="fs-5 p-3">A widely used asymmetric encryption algorithm that relies on the mathematical difficulty of factoring large prime numbers for secure data encryption and digital signatures.</p>
-                </div>
-                <div class="m-2" style="width: 40%;">
-                    <button class="btn btn-outline-light p-3 mx-2 border-3 rounded-4">Diffie-Hellman</button>
-                    <p class="fs-5 p-3">An asymmetric key exchange protocol that allows two parties to securely generate a shared secret over an insecure communication channel without directly transmitting the key.</p>
-                </div>
-            </div>
-            <br>
-            <h3 class="heading">Hashing Algorithms</h3>
-            <div class="d-flex justify-content-center flex-wrap py-4">
-                <div class="m-2" style="width: 20%;">
-                    <button class="btn btn-outline-light p-3 mx-2 border-3 rounded-4">MD5</button>
-                    <p class="fs-6 p-3">A widely-used cryptographic hash function that produces a 128-bit hash value, but is now considered insecure due to vulnerability to collision attacks.</p>
-                </div>
-                <div class="m-2" style="width: 20%;">
-                    <button class="btn btn-outline-light p-3 mx-2 border-3 rounded-4">SHA-1</button>
-                    <p class="fs-6 p-3">Generates a 160-bit hash value and was commonly used in security protocols, but is deprecated because of weaknesses allowing for collision attacks.</p>
-                </div>
-                <div class="m-2" style="width: 20%;">
-                    <button class="btn btn-outline-light p-3 mx-2 border-3 rounded-4">SHA-256</button>
-                    <p class="fs-6 p-3">A part of the SHA-2 family, producing a 256-bit hash, and is widely used for cryptographic security, offering strong resistance to collisions.</p>
-                </div>
-                <div class="m-2" style="width: 20%;">
-                    <button class="btn btn-outline-light p-3 mx-2 border-3 rounded-4">SHA-512</button>
-                    <p class="fs-6 p-3">Another member of the SHA-2 family, producing a 512-bit hash value, and provides stronger security and greater resistance to attacks compared to SHA-256.</p>
-                </div>
-            </div>
+        <div class="w-25 m-2">
+            <button class="btn btn-outline-light p-3 mx-2 border-3 rounded-4">Vernam Cipher</button>
+            <p class="fs-5 p-3">The Vernam cipher, also known as a one-time pad, is a method of encrypting alphabetic text using a substitution technique.</p>
+        </div>
+        <div class="w-25 m-2">
+            <button class="btn btn-outline-light p-3 mx-2 border-3 rounded-4">Block Cipher</button>
+            <p class="fs-5 p-3">A substitution cipher that shifts each letter in the plaintext by a fixed number of positions in the alphabet.</p>
+        </div>
+    </div>
+    <br>
+    <h3 class="heading">Asymmertric Encryption Algorithms</h3>
+    <div class="d-flex justify-content-center flex-wrap py-4">
+        <div class="m-2" style="width: 40%;">
+            <button class="btn btn-outline-light p-3 mx-2 border-3 rounded-4">RSA Encryption</button>
+            <p class="fs-5 p-3">A widely used asymmetric encryption algorithm that relies on the mathematical difficulty of factoring large prime numbers for secure data encryption and digital signatures.</p>
+        </div>
+        <div class="m-2" style="width: 40%;">
+            <button class="btn btn-outline-light p-3 mx-2 border-3 rounded-4">Diffie-Hellman</button>
+            <p class="fs-5 p-3">An asymmetric key exchange protocol that allows two parties to securely generate a shared secret over an insecure communication channel without directly transmitting the key.</p>
+        </div>
+    </div>
+    <br>
+    <h3 class="heading">Hashing Algorithms</h3>
+    <div class="d-flex justify-content-center flex-wrap py-4">
+        <div class="m-2" style="width: 20%;">
+            <button class="btn btn-outline-light p-3 mx-2 border-3 rounded-4">MD5</button>
+            <p class="fs-6 p-3">A widely-used cryptographic hash function that produces a 128-bit hash value, but is now considered insecure due to vulnerability to collision attacks.</p>
+        </div>
+        <div class="m-2" style="width: 20%;">
+            <button class="btn btn-outline-light p-3 mx-2 border-3 rounded-4">SHA-1</button>
+            <p class="fs-6 p-3">Generates a 160-bit hash value and was commonly used in security protocols, but is deprecated because of weaknesses allowing for collision attacks.</p>
+        </div>
+        <div class="m-2" style="width: 20%;">
+            <button class="btn btn-outline-light p-3 mx-2 border-3 rounded-4">SHA-256</button>
+            <p class="fs-6 p-3">A part of the SHA-2 family, producing a 256-bit hash, and is widely used for cryptographic security, offering strong resistance to collisions.</p>
+        </div>
+        <div class="m-2" style="width: 20%;">
+            <button class="btn btn-outline-light p-3 mx-2 border-3 rounded-4">SHA-512</button>
+            <p class="fs-6 p-3">Another member of the SHA-2 family, producing a 512-bit hash value, and provides stronger security and greater resistance to attacks compared to SHA-256.</p>
         </div>
     </div>
 </div>
-{% endblock content %}
+{% endblock mainpage %}
