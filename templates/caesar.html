@@ -1,0 +1,143 @@
+{% extends "main.html" %}
+
+{% block addedstyle %}
+    .field {
+        background-color: #2C394C;
+        height: 100%;
+    }
+    .field p {
+        font-size: 0.8rem;
+    }
+    .field textarea:focus:not(#output) {
+        border: 2px solid #fb923c;
+        box-shadow: none;
+        outline: none;
+    }
+    #output:focus {
+        box-shadow: none;
+        outline: none;
+    }
+    .field input:focus {
+        border: 2px solid #fb923c;
+        box-shadow: none;
+        outline: none;
+    }
+    .container, row {
+        width: 96%;
+        margin: 2%;
+    }
+    input[type="radio"] {
+        accent-color: #fb923c;
+    }
+    input[type="submit"] {
+        background-color: #fb923c;
+        border: 2px solid #fb923c;
+    }
+    input[type="submit"]:hover {
+        border: 2px solid #fb923c;
+    }
+{% endblock addedstyle %}
+
+{% block content %}
+<div class="container m-4">
+    <form id="caesarForm">
+        <div class="row justify-content-between">
+            <div class="field col-4 rounded-4 p-3">
+                <label for="text-input">Text</label>
+                <textarea id="text-input" name="text-input" class="form-control mt-2" placeholder="Enter text..." required>{{ text if text }}</textarea>
+                <br>
+            </div>
+            <div class="col-3 field rounded-4 p-3">
+                <label for="shift-value">Shift Value</label>
+                <input type="text" id="shift-value" name="shift-values" class="form-control mt-2" placeholder="Enter shift value/s..." value="{{ keys if keys }}" required>
+                <p class="mt-2">Use spaces for multiple keys (eg. 2 4 3 2)</p>
+            </div>
+            <div class="col-4 field rounded-4 p-3">
+                <label for="output">Output</label>
+                <textarea id="output" class="form-control mt-2" placeholder="Result..." readonly>{{ output if output }}</textarea>
+            </div>
+        </div>
+        <br>
+        <div class="row w-100vh">
+            <div class="col-3 field m-3 p-3 rounded-4">
+                <h5>Select one:</h5>
+                <div class="form-check fs-5">
+                    <input type="radio" name="mode" id="encrypt" value="encrypt" checked>
+                    <label for="encrypt">Encrypt</label>
+                </div>
+                <div class="form-check fs-5">
+                    <input type="radio" name="mode" id="decrypt" value="decrypt">
+                    <label for="decrypt">Decrypt</label>
+                </div>
+                <div class="d-flex justify-content-center">
+                    <button type="submit" class="btn mt-3 rounded-pill" style="background-color: #fb923c; border: 2px solid #fb923c;">Process</button>
+                </div>
+            </div>
+            <div class="col-8 field m-3 p-3 rounded-4" id="process-table">
+                <h4>Encryption</h4>
+                <div class="d-flex justify-content-between align-items-center bg-secondary p-2 rounded-3">
+                    <span style="flex:1; text-align:center;">Original Character</span>
+                    <span style="flex:1; text-align:center;">Shift</span>
+                    <span style="flex:1; text-align:center;">Coded Character</span>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+{% endblock content %}
+
+{% block addedscript %}
+<script>
+    document.getElementById('caesarForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const formData = new FormData(this);
+        
+        try {
+            const response = await fetch('/caesar-cipher', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            });
+            
+            const data = await response.json();
+            
+            // Update the output textarea
+            document.getElementById('output').value = data.output;
+            
+            // Update the encryption/decryption table
+            updateProcessTable(data.text, data.keys, data.output);
+            
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    });
+
+    function updateProcessTable(text, keys, output) {
+        const tableDiv = document.getElementById('process-table');
+        let tableContent = `
+            <h4>${document.getElementById('encrypt').checked ? 'Encryption' : 'Decryption'}</h4>
+            <div class="d-flex justify-content-between align-items-center bg-secondary p-2 rounded-3">
+                <span style="flex:1; text-align:center;">Original Character</span>
+                <span style="flex:1; text-align:center;">Shift</span>
+                <span style="flex:1; text-align:center;">Coded Character</span>
+            </div>
+        `;
+        
+        for(let i = 0; i < text.length; i++) {
+            if (text[i] !== ' ') {
+                tableContent += `
+                <div class="d-flex justify-content-between align-items-center p-2">
+                    <span style="flex:1; text-align:center;">${text[i]}</span>
+                    <span style="flex:1; text-align:center;">${keys[i]}</span>
+                    <span style="flex:1; text-align:center;">${output[i]}</span>
+                </div>`;
+            }
+        }
+        
+        tableDiv.innerHTML = tableContent;
+    }
+</script>
+{% endblock addedscript %}

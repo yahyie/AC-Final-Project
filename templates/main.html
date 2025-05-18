@@ -13,11 +13,42 @@
             border-left: #fb923c 5px solid;
             border-radius: 10px;
         }
+        .form-select {
+            background-color: #faf4f2;
+            color: #252525;
+            outline: none;
+            box-shadow: none;
+            border: none;
+        }
+        .form-select:focus {
+            outline: none;
+            box-shadow: none;
+            border: none;
+        }
+    {% block addedstyle %}{% endblock addedstyle %}
     </style>
 {% endblock style %}
 
 {% block navbar %}
     <div class="navbar mt-2 px-4 py-2">
-        <h3>{{contents['title']}} <span class="type">{{contents['type']}}</span></h3> 
+        <h3>{{contents['title']}} <span class="type">{{contents['type']}}</span></h3>        
+        <select id="cipher-dropdown" class="form-select" style="width:auto; display:inline-block;">
+            <option value="/caesar-cipher" {% if contents['id'] == '#caesar-cipher' %}selected{% endif %}>Caesar Cipher</option>
+            <option value="/vernam-cipher" {% if contents['id'] == '#vernam-cipher' %}selected{% endif %}>Vernam Cipher</option>
+            <option value="/block-cipher" {% if contents['id'] == '#block-cipher' %}selected{% endif %}>Block Cipher</option>
+            <option value="/rsa" {% if contents['id'] == '#rsa' %}selected{% endif %}>RSA Cipher</option>
+            <option value="/diffie-hellman" {% if contents['id'] == '#diffie-hellman' %}selected{% endif %}>Diffie-Hellman</option>
+            <option value="/md5" {% if contents['id'] == '#md5' %}selected{% endif %}>MD5</option>
+            <option value="/sha1" {% if contents['id'] == '#sha1' %}selected{% endif %}>SHA-1</option>
+            <option value="/sha256" {% if contents['id'] == '#sha256' %}selected{% endif %}>SHA-256</option>
+            <option value="/sha512" {% if contents['id'] == '#sha512' %}selected{% endif %}>SHA-512</option>
+        </select>
     </div>
 {% endblock navbar %}
+
+{% block content %}
+
+{% endblock content %}
+
+{% block addedscript %}
+{% endblock addedscript %}

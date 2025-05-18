@@ -1,4 +1,5 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for, jsonify
+from symmetric import CaesarCipher
 
 app = Flask(__name__)
 
@@ -8,16 +9,31 @@ def index():
 
 @app.route('/caesar-cipher', methods=['GET', 'POST'])
 def caesar_cipher():
-    if request.method == 'POST':    
-        pass
-
     contents = {
         'id': "#caesar-cipher",
         'title': "Caesar Cipher",
         'type': "Symmetric",
     }
 
-    return render_template("main.html", contents=contents)
+    if request.method == 'POST':    
+        text = request.form.get('text-input')
+        shift_keys = str(request.form.get('shift-values')).split(' ')
+        is_decryption = request.form.get('mode') == 'decrypt'
+
+        output = CaesarCipher.encrypt_decrypt(text, shift_keys, is_decryption)
+
+        # Repeat the keys until it matches the length of the text
+        repeated_keys = (shift_keys * ((len(text) + len(shift_keys) - 1) // len(shift_keys)))[:len(text)]
+
+        # Check if it's an AJAX request
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            return jsonify({
+                'text': text,
+                'keys': repeated_keys,
+                'output': output
+            })
+
+    return render_template("caesar.html", contents=contents)
 
 @app.route('/vernam-cipher', methods=['GET', 'POST'])
 def vernam_cipher():
@@ -30,7 +46,7 @@ def vernam_cipher():
         'type': "Symmetric",
     }
 
-    return render_template("main.html", contents=contents)
+    return render_template("vernam.html", contents=contents)
 
 @app.route('/block-cipher', methods=['GET', 'POST'])
 def block_cipher():
@@ -43,7 +59,7 @@ def block_cipher():
         'type': "Symmetric",
     }
 
-    return render_template("main.html", contents=contents)
+    return render_template("block.html", contents=contents)
 
 @app.route('/rsa', methods=['GET', 'POST'])
 def rsa_cipher():
@@ -56,7 +72,7 @@ def rsa_cipher():
         'type': "Asymmetric",
     }
 
-    return render_template("main.html", contents=contents)
+    return render_template("rsa.html", contents=contents)
 
 @app.route('/diffie-hellman', methods=['GET', 'POST'])
 def diffie_hellman():
@@ -66,10 +82,10 @@ def diffie_hellman():
     contents = {
         'id': "#diffie-hellman",
         'title': "Diffie-Hellman",
-        'type': "Key Exchange",
+        'type': "Asymmetric",
     }
 
-    return render_template("main.html", contents=contents)
+    return render_template("diffie-hellman.html", contents=contents)
 
 @app.route('/md5', methods=['GET', 'POST'])
 def md5():
@@ -82,7 +98,7 @@ def md5():
         'type': "Hash",
     }
 
-    return render_template("main.html", contents=contents)
+    return render_template("md5.html", contents=contents)
 
 @app.route('/sha1', methods=['GET', 'POST'])
 def sha1():
@@ -95,7 +111,7 @@ def sha1():
         'type': "Hash",
     }
 
-    return render_template("main.html", contents=contents)
+    return render_template("sha1.html", contents=contents)
 
 @app.route('/sha256', methods=['GET', 'POST'])
 def sha256():
@@ -108,7 +124,7 @@ def sha256():
         'type': "Hash",
     }
 
-    return render_template("main.html", contents=contents)
+    return render_template("sh256.html", contents=contents)
 
 @app.route('/sha512', methods=['GET', 'POST'])
 def sha512():
@@ -121,7 +137,7 @@ def sha512():
         'type': "Hash",
     }
 
-    return render_template("main.html", contents=contents)
+    return render_template("sha512.html", contents=contents)
 
 
 if __name__ == "__main__":
