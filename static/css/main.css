@@ -1,0 +1,48 @@
+.form-select {
+    background-color: #faf4f2;
+    color: #252525;
+    outline: none;
+    box-shadow: none;
+    border: none;
+}
+.form-select:focus {
+    outline: none;
+    box-shadow: none;
+    border: none;
+}
+
+.container, row {
+    width: 96%;
+    margin: 2%;
+}
+.field {
+    background-color: #2C394C;
+    height: 100%;
+}
+.field p {
+    font-size: 0.8rem;
+}
+.field textarea:focus:not(#output) {
+    border: 2px solid #fb923c;
+    box-shadow: none;
+    outline: none;
+}
+#output:focus {
+    box-shadow: none;
+    outline: none;
+}
+.field input:focus {
+    border: 2px solid #fb923c;
+    box-shadow: none;
+    outline: none;
+}
+input[type="radio"] {
+    accent-color: #fb923c;
+}
+input[type="submit"] {
+    background-color: #fb923c;
+    border: 2px solid #fb923c;
+}
+input[type="submit"]:hover {
+    border: 2px solid #fb923c;
+}
