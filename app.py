@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, jsonify
-from symmetric import CaesarCipher
+from symmetric import CaesarCipher, VernamCipher
 
 app = Flask(__name__)
 
@@ -37,14 +37,29 @@ def caesar_cipher():
 
 @app.route('/vernam-cipher', methods=['GET', 'POST'])
 def vernam_cipher():
-    if request.method == 'POST':
-        pass
-
     contents = {
         'id': "#vernam-cipher",
         'title': "Vernam Cipher",
         'type': "Symmetric",
     }
+
+    if request.method == 'POST':
+        text = request.form.get('text-input')
+        mode = request.form.get('mode')
+
+        decimal_text = VernamCipher.text_to_decimal(text)
+        key = VernamCipher.generate_key(len(decimal_text)) if mode == 'encrypt' else request.form.get('random-keys')
+        decimal_output = VernamCipher.vernam_encrypt(decimal_text, key) if mode == 'encrypt' else VernamCipher.vernam_decrypt(decimal_text, key)
+        output = VernamCipher.decimal_to_text(decimal_output)
+
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            return jsonify({
+                'text': text,
+                'decimal_text': decimal_text,
+                'key': key,
+                'decimal_output': decimal_output,
+                'output': output
+            })
 
     return render_template("vernam.html", contents=contents)
 
