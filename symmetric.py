@@ -58,3 +58,38 @@ class VernamCipher:
     def vernam_decrypt(ciphertext_dec: str, key_dec: str) -> str:
         """Decrypt decimal ciphertext using Vernam cipher"""
         return ("".join([str((int(ciphertext_dec[i]) + int(key_dec[i])) % 10) for i in range(len(ciphertext_dec))]))
+
+class BlockCipher:
+
+    @staticmethod
+    def encrypt_decrypt(text, key, operation):
+        if len(key) != 8:
+            return "Error: Key must be exactly 8 characters"
+            
+        if operation == "encrypt":
+            remainder = len(text) % 8
+            if remainder > 0:
+                text = text + ("_" * (8-remainder))
+        
+            byte_key = key.encode('ascii')
+            
+            result = bytearray()
+            byte_text = text.encode('ascii')
+            
+            for i in range (0, len(byte_text), 8):
+                block = byte_text[i:i+8]
+                for j in range(len(block)):
+                    xor = block[j] ^ byte_key[j % len(byte_key)]
+                    result.append(xor)
+                    
+            return bytes(result).hex(' ').upper()
+            
+        elif operation == 'decrypt':
+            string_text = ""
+            for i in text.split():
+                string_text += (chr(int(i, 16)))
+            
+            return "".join(chr(ord(x) ^ ord(y)) for x, y in zip(string_text, key * (len(string_text) // 8) + key[:len(string_text) % 8])).rstrip('_')
+
+        else:
+            return "Error: Invalid operation. Use 'encrypt' or 'decrypt'"

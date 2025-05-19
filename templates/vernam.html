@@ -28,7 +28,7 @@
                     <div class="input-group mt-2">
                         <input type="text" id="random-keys" name="random-keys" class="form-control" placeholder="Select decrypt to enter key..." value="{{ keys if keys }}" readonly>
                         <button type="button" class="btn btn-outline-secondary" onclick="copyRandomKey()" title="Copy to clipboard">
-                            <img src="{{ url_for('static', filename='img/icon-copy.svg') }}" alt="Copy" style="width:20px; height: 20px;;">
+                            <img src="{{ url_for('static', filename='img/icon-key.png') }}" alt="Copy" style="width:20px; height: 20px;;">
                         </button>
                     </div>
                     <p class="mt-2">Note: Copy random key for decryption</p>
@@ -57,7 +57,7 @@
                 </div>
             </div>
             <div class="col-8 field m-3 p-3 rounded-4 justify-content-between">
-                <h4>Encryption</h4>
+                <h4>Summary</h4>
                 <table class="table table-bordered align-middle">
                     <tbody>
                         <tr>
