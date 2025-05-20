@@ -1,23 +1,46 @@
 {% extends "main.html" %}
 
+{% block addedstyle %}
+#generate-keys textarea {
+    height: 200px;
+}
+
+#process-table .row > div {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: pre-wrap;
+    overflow: hidden;
+}
+{% endblock addedstyle %}
+
 {% block content %}
     <div class="container">
         <form id="generate-keys">
             <div class="row justify-contents-evenly">
                 <div class="col-6">
                     <div class="field rounded-4 p-3">
-                        <label for="private-key">Private Key</label>
-                        <textarea id="private-key" name="private-key" class="form-control mt-2" placeholder="Private key goes here..." readonly></textarea>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <label for="public-key" class="mb-0">Public Key</label>
+                            <button type="button" class="btn btn-sm btn-outline-secondary ms-2 copy-btn" data-target="public-key" title="Copy">
+                                <img src="{{ url_for('static', filename='img/icon-copy.svg') }}" alt="Copy" style="width: 20px; height: 20px;">
+                            </button>
+                        </div>
+                        <textarea id="public-key" name="public-key" class="form-control mt-2" placeholder="Public key goes here..." readonly></textarea>
                     </div>
                 </div>
                 <div class="col-6">
                     <div class="field rounded-4 p-3">
-                        <label for="public-key">Public Key</label>
-                        <textarea id="public-key" name="public-key" class="form-control mt-2" placeholder="Public key goes here..." readonly></textarea>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <label for="private-key" class="mb-0">Private Key</label>
+                            <button type="button" class="btn btn-sm btn-outline-secondary ms-2 copy-btn" data-target="private-key" title="Copy">
+                                <img src="{{ url_for('static', filename='img/icon-copy.svg') }}" alt="Copy" style="width: 20px; height: 20px;">
+                            </button>
+                        </div>
+                        <textarea id="private-key" name="private-key" class="form-control mt-2" placeholder="Private key goes here..." readonly></textarea>
                     </div>
                 </div>
             </div>
-            <input type="submit" class="btn mt-3 rounded-pill" value="Generate Key-Value Pair">
+            <input type="submit" class="btn mt-3 rounded-pill" value="Generate Key Pair">
         </form>
         <br>
         <form id="rsaForm">
@@ -83,6 +106,87 @@
         const keyLabel = document.querySelector('label[for="key"]');
         const keyInput = document.getElementById('key');
         const summaryKey = document.getElementById('summary-key');
+        const processTable = document.getElementById('process-table');
+        
+        // Add copy button functionality
+        document.querySelectorAll('.copy-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const targetId = this.dataset.target;
+                const textArea = document.getElementById(targetId);
+                
+                navigator.clipboard.writeText(textArea.value)
+                    .then(() => {
+                        // Change button style temporarily to show success
+                        const originalTitle = this.title;
+                        this.title = 'Copied!';
+                        this.classList.add('btn-success');
+                        this.classList.remove('btn-outline-secondary');
+                        
+                        setTimeout(() => {
+                            this.title = originalTitle;
+                            this.classList.remove('btn-success');
+                            this.classList.add('btn-outline-secondary');
+                        }, 1500);
+                    })
+                    .catch(err => {
+                        console.error('Failed to copy:', err);
+                        alert('Failed to copy to clipboard');
+                    });
+            });
+        });
+
+        // Add key generation form handling
+        const generateKeysForm = document.getElementById('generate-keys');
+        generateKeysForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            fetch('/rsa-genkey', {
+                method: 'POST',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('public-key').value = data.public_key;
+                document.getElementById('private-key').value = data.private_key;
+            })
+            .catch(error => console.error('Error:', error));
+        });
+
+        // Add RSA form handling
+        const rsaForm = document.getElementById('rsaForm');
+        rsaForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            
+            fetch('/rsa', {
+            method: 'POST',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+            document.getElementById('output').value = data.output;
+            // Update summary table: replace previous summary row if exists
+            let summaryContent = processTable.querySelector('.summary-row');
+            if (!summaryContent) {
+                summaryContent = document.createElement('div');
+                summaryContent.className = 'row px-2 mt-2 summary-row';
+                const headerRow = processTable.querySelector('.justify-content-between');
+                headerRow.insertAdjacentElement('afterend', summaryContent);
+            }
+            summaryContent.innerHTML = `
+                <div class="col-4 text-break">${data.text}</div>
+                <div class="col-4 text-break">${data.used_key}</div>
+                <div class="col-4 text-break">${data.output}</div>
+            `;
+            })
+            .catch(error => console.error('Error:', error));
+        });
 
         function updateKeyLabel() {
             const isEncrypt = encryptRadio.checked;

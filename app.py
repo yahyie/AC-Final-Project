@@ -97,21 +97,34 @@ def rsa_cipher():
     }
 
     if request.method == 'POST':
-        public_key, private_key = RSA.generate_keys()
         text = request.form.get('text-input')
+        used_key = request.form.get('key')
         mode = request.form.get('mode')
 
-        output = RSA.encrypt_message(text, public_key) if mode == 'encrypt' else RSA.decrypt_message(text, private_key)
+        output = RSA.encrypt_message(text, used_key) if mode == 'encrypt' else RSA.decrypt_message(text, used_key)
 
         if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
             return jsonify({
                 'text': text,
-                'public_key': public_key,
-                'private_key': private_key,
+                'used_key': used_key,
                 'output': output
             })
+            
+        return render_template("rsa.html", contents=contents, text=text, key=used_key, output=output)
 
     return render_template("rsa.html", contents=contents)
+
+@app.route('/rsa-genkey', methods=['GET', 'POST'])
+def rsa_genkeys():
+    private_key, public_key = RSA.generate_keys()
+
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        return jsonify({
+            'public_key': public_key,
+            'private_key': private_key
+        })
+    
+    return redirect(url_for('rsa_cipher'))
 
 @app.route('/diffie-hellman', methods=['GET', 'POST'])
 def diffie_hellman():

@@ -46,3 +46,12 @@ input[type="submit"] {
 input[type="submit"]:hover {
     border: 2px solid #fb923c;
 }
+input[type="text"] {
+    background-color: #ecded0;
+    border: #2C394C 1px solid;
+}
+
+.field textarea {
+    background-color: #ecded0;
+    border: #2C394C 1px solid;
+}
