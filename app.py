@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, jsonify
 from symmetric import CaesarCipher, VernamCipher, BlockCipher
+from asymmetric import RSA
 
 app = Flask(__name__)
 
@@ -89,14 +90,26 @@ def block_cipher():
 
 @app.route('/rsa', methods=['GET', 'POST'])
 def rsa_cipher():
-    if request.method == 'POST':
-        pass
-
     contents = {
         'id': "#rsa",
-        'title': "RSA Cipher",
+        'title': "RSA Encryption",
         'type': "Asymmetric",
     }
+
+    if request.method == 'POST':
+        public_key, private_key = RSA.generate_keys()
+        text = request.form.get('text-input')
+        mode = request.form.get('mode')
+
+        output = RSA.encrypt_message(text, public_key) if mode == 'encrypt' else RSA.decrypt_message(text, private_key)
+
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            return jsonify({
+                'text': text,
+                'public_key': public_key,
+                'private_key': private_key,
+                'output': output
+            })
 
     return render_template("rsa.html", contents=contents)
 
