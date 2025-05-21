@@ -38,8 +38,8 @@
                     <label for="random-keys">Random Key</label>
                     <div class="input-group mt-2">
                         <input type="text" id="random-keys" name="random-keys" class="form-control" placeholder="Select decrypt to enter key..." value="{{ keys if keys }}" readonly>
-                        <button type="button" class="btn btn-outline-secondary" onclick="copyRandomKey()" title="Copy to clipboard">
-                            <img src="{{ url_for('static', filename='img/icon-key.png') }}" alt="Copy" style="width:20px; height: 20px;;">
+                        <button type="button" class="btn btn-outline-secondary" id="copy-key-btn" title="Copy to clipboard">
+                            <img src="{{ url_for('static', filename='img/icon-copy.svg') }}" alt="Copy" style="width:20px; height: 20px;;">
                         </button>
                     </div>
                     <p class="mt-2">Note: Copy random key for decryption</p>
@@ -105,18 +105,32 @@
 
 {% block addedscript %}
 <script>
-    function copyRandomKey() {
-        const randomKeyInput = document.getElementById('random-keys');
-        navigator.clipboard.writeText(randomKeyInput.value)
-            .then(() => {
-                alert('Random key copied to clipboard!');
-            })
-            .catch(err => {
-                alert('Failed to copy: ' + err);
-            });
-    }
-
     document.addEventListener('DOMContentLoaded', function() {
+        // Add copy button functionality
+        const copyBtn = document.getElementById('copy-key-btn');
+        copyBtn.addEventListener('click', function() {
+            const randomKeyInput = document.getElementById('random-keys');
+            
+            navigator.clipboard.writeText(randomKeyInput.value)
+                .then(() => {
+                        // Change button style temporarily to show success
+                        const originalTitle = this.title;
+                        this.title = 'Copied!';
+                        this.classList.add('btn-success');
+                        this.classList.remove('btn-outline-secondary');
+                        
+                        setTimeout(() => {
+                            this.title = originalTitle;
+                            this.classList.remove('btn-success');
+                            this.classList.add('btn-outline-secondary');
+                        }, 1500);
+                    })
+                    .catch(err => {
+                        console.error('Failed to copy:', err);
+                        alert('Failed to copy to clipboard');
+                    });
+        });
+
         const encryptRadio = document.getElementById('encrypt');
         const decryptRadio = document.getElementById('decrypt');
         const randomKeysInput = document.getElementById('random-keys');
