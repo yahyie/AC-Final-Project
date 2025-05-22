@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, jsonify
 from symmetric import CaesarCipher, VernamCipher, BlockCipher
 from asymmetric import RSA, ECC
-from hashing import MD5Hash, SHA1Hash
+from hashing import MD5Hash, SHA1Hash, SHA256Hash
 
 app = Flask(__name__)
 
@@ -251,16 +251,41 @@ def verify_sha1():
 
 @app.route('/sha256', methods=['GET', 'POST'])
 def sha256():
-    if request.method == 'POST':
-        pass
-
     contents = {
         'id': "#sha256",
         'title': "SHA-256",
         'type': "Hash",
     }
-
     return render_template("sha256.html", contents=contents)
+
+@app.route('/sha256-hash', methods=['POST'])
+def sha256_hash():
+    if request.method == 'POST':
+        text = request.form.get('text-input')
+        hash_result = SHA256Hash.generate_hash(text)
+
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            return jsonify({
+                'text': text,
+                'hash': hash_result
+            })
+    
+    return redirect(url_for('sha256'))
+
+@app.route('/verify-sha256', methods=['POST'])
+def verify_sha256():
+    try:
+        data = request.get_json()
+        text = data.get('text')
+        hash_to_verify = data.get('hash')
+        
+        if not text or not hash_to_verify:
+            return jsonify({'error': 'Missing required parameters'}), 400
+            
+        is_match = SHA256Hash.verify_hash(text, hash_to_verify)
+        return jsonify({'match': is_match})
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 @app.route('/sha512', methods=['GET', 'POST'])
 def sha512():
