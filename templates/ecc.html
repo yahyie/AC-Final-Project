@@ -1,0 +1,304 @@
+{% extends "main.html" %}
+
+{% block addedstyle %}
+    #generate-keys textarea {
+        height: 200px;
+    }
+
+    #process-table .row > div {
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        white-space: pre-wrap;
+        overflow: hidden;
+    }
+    #encrypted_data .col {
+        word-break: break-all; 
+        overflow-wrap: 
+        break-word;
+    }
+{% endblock addedstyle %}
+
+{% block content %}
+    <div class="container">
+        <form id="generate-keys">
+            <div class="row justify-contents-evenly">
+                <div class="col-6">
+                    <div class="field rounded-4 p-3">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <label for="public-key" class="mb-0">Public Key</label>
+                            <button type="button" class="btn btn-sm btn-outline-secondary ms-2 copy-btn" data-target="public-key" title="Copy">
+                                <img src="{{ url_for('static', filename='img/icon-copy.svg') }}" alt="Copy" style="width: 20px; height: 20px;">
+                            </button>
+                        </div>
+                        <textarea id="public-key" name="public-key" class="form-control mt-2" placeholder="Public key goes here..." readonly></textarea>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="field rounded-4 p-3">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <label for="private-key" class="mb-0">Private Key</label>
+                            <button type="button" class="btn btn-sm btn-outline-secondary ms-2 copy-btn" data-target="private-key" title="Copy">
+                                <img src="{{ url_for('static', filename='img/icon-copy.svg') }}" alt="Copy" style="width: 20px; height: 20px;">
+                            </button>
+                        </div>
+                        <textarea id="private-key" name="private-key" class="form-control mt-2" placeholder="Private key goes here..." readonly></textarea>
+                    </div>
+                </div>
+            </div>
+            <input type="submit" class="btn mt-3 rounded-pill" value="Generate Key Pair">
+        </form>
+        <br>
+        <form id="eccForm">
+            <div class="row justify-content-evenly mt-3">
+                <div class="col-4">
+                    <div class="field rounded-4 p-3">
+                        <label for="text-input">Text</label>
+                        <textarea id="text-input" name="text-input" class="form-control mt-2" placeholder="Enter text..." required></textarea>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="field rounded-4 p-3">
+                        <label for="key">Key</label>
+                        <textarea type="text" id="key" name="key" class="form-control mt-2" placeholder="Enter key..." required></textarea>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="field rounded-4 p-3">
+                        <label for="output">Output</label>
+                        <textarea id="output" class="form-control mt-2" placeholder="Result..." readonly></textarea>
+                    </div>
+                </div>
+            </div>
+            <!-- if data.ciphertext is present show this -->
+            <div class="field rounded-4 mt-4 p-4 my-3" hidden>
+                <div class="row" id="encrypted-data">
+                    <div class="col" style="word-break: break-all; overflow-wrap: break-word;">
+                        <span>Emepheral Public Key: <br><u></u></span>
+                    </div>
+                    <div class="col" style="word-break: break-all; overflow-wrap: break-word;">
+                        <span>Nonce: <br><u></u></span>
+                    </div>
+                    <div class="col" style="word-break: break-all; overflow-wrap: break-word;">
+                        <span>Encrypted Text: <br><u></u></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row justify-content-evenly my-3">
+                <div class="col-3">
+                    <div class="field my-3 p-3 h-auto rounded-4">
+                        <h5>Select one:</h5>
+                        <div class="form-check fs-5">
+                            <input type="radio" name="mode" id="encrypt" value="encrypt" checked>
+                            <label for="encrypt">Encrypt</label>
+                        </div>
+                        <div class="form-check fs-5">
+                            <input type="radio" name="mode" id="decrypt" value="decrypt">
+                            <label for="decrypt">Decrypt</label>
+                        </div>
+                        <div class="d-flex justify-content-center">
+                            <input type="submit" class="btn mt-3 rounded-pill" value="Process">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-9">
+                    <div class="field my-3 p-3 h-auto rounded-4" id="process-table">
+                        <h4>Summary</h4>
+                        <div class="justify-content-between text-center bg-secondary p-2 rounded-3">
+                            <div class="row">
+                                <div class="col-4">Text</div>
+                                <div class="col-4" id="summary-key">Key</div>
+                                <div class="col-4">Output</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock content %}
+
+{% block addedscript %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Global variable to store encrypted data for decryption
+        let storedEncryptedData = null;
+
+        // Add copy button functionality
+        document.querySelectorAll('.copy-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const targetId = this.dataset.target;
+                const textArea = document.getElementById(targetId);
+                
+                navigator.clipboard.writeText(textArea.value)
+                    .then(() => {
+                        // Change button style temporarily to show success
+                        const originalTitle = this.title;
+                        this.title = 'Copied!';
+                        this.classList.add('btn-success');
+                        this.classList.remove('btn-outline-secondary');
+                        
+                        setTimeout(() => {
+                            this.title = originalTitle;
+                            this.classList.remove('btn-success');
+                            this.classList.add('btn-outline-secondary');
+                        }, 1500);
+                    })
+                    .catch(err => {
+                        console.error('Failed to copy:', err);
+                    });
+            });
+        });
+
+        // Add key generation form handling
+        const generateKeysForm = document.getElementById('generate-keys');
+        generateKeysForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            fetch('/ecc-genkey', {
+                method: 'POST',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('public-key').value = data.public_key;
+                document.getElementById('private-key').value = data.private_key;
+            })
+            .catch(error => console.error('Error:', error));
+        });
+
+        // Radio button functionality
+        const encryptRadio = document.getElementById('encrypt');
+        const decryptRadio = document.getElementById('decrypt');
+        const keyLabel = document.querySelector('label[for="key"]');
+        const keyInput = document.getElementById('key');
+        const summaryKey = document.getElementById('summary-key');
+        const encryptedDataField = document.querySelector('.field[hidden]');
+        const textInput = document.getElementById('text-input');
+        const outputField = document.getElementById('output');
+
+        // Function to update visibility of buttons and labels based on mode
+        function updateKeyLabel() {
+            const isEncrypt = encryptRadio.checked;
+            keyLabel.textContent = isEncrypt ? 'Public Key' : 'Private Key';
+            keyInput.placeholder = `Enter ${isEncrypt ? 'public' : 'private'} key...`;
+            summaryKey.textContent = isEncrypt ? 'Public Key' : 'Private Key';
+
+            // Enable/disable decrypt based on stored data
+            decryptRadio.disabled = !storedEncryptedData;
+            if (!storedEncryptedData && decryptRadio.checked) {
+                encryptRadio.checked = true;
+                updateKeyLabel();
+            }
+        }
+
+        // Function to update the summary table
+        function updateSummaryTable(text, key, output) {
+            const processTable = document.getElementById('process-table');
+            
+            // Remove existing data row if it exists
+            const existingDataRow = processTable.querySelector('.data-row');
+            if (existingDataRow) {
+                existingDataRow.remove();
+            }
+
+            // Create and append new data row
+            const dataRow = document.createElement('div');
+            dataRow.className = 'row data-row mt-2';
+            dataRow.innerHTML = `
+                <div class="col-4">${text}</div>
+                <div class="col-4">${key}</div>
+                <div class="col-4">${output}</div>
+            `;
+            processTable.appendChild(dataRow);
+        }
+
+        // Function to update the encrypted data display
+        function updateEncryptedDataDisplay(data) {
+            if (data.ephemeral_public_key && data.nonce && data.ciphertext) {
+                const spans = encryptedDataField.querySelectorAll('u');
+                spans[0].textContent = data.ephemeral_public_key;
+                spans[1].textContent = data.nonce;
+                spans[2].textContent = data.ciphertext;
+                encryptedDataField.hidden = false;
+            } else {
+                encryptedDataField.hidden = true;
+            }
+        }
+
+        // Add ECC form handling
+        const eccForm = document.getElementById('eccForm');
+        eccForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = {
+                message: textInput.value,
+                public_key: keyInput.value
+            };
+
+            const endpoint = encryptRadio.checked ? '/ecc-encrypt' : '/ecc-decrypt';
+            
+            if (!encryptRadio.checked) {
+                // For decryption, include the stored encrypted data
+                if (!storedEncryptedData) {
+                    alert('No encrypted data available for decryption');
+                    return;
+                }
+                formData.encrypted_data = storedEncryptedData;
+                formData.private_key = keyInput.value;
+            }
+
+            fetch(endpoint, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    throw new Error(data.error);
+                }
+
+                if (encryptRadio.checked) {
+                    // Store encrypted data for later decryption
+                    storedEncryptedData = {
+                        ephemeral_public_key: data.ephemeral_public_key,
+                        nonce: data.nonce,
+                        ciphertext: data.ciphertext
+                    };
+                    outputField.value = data.ciphertext;
+                    updateEncryptedDataDisplay(data);
+                } else {
+                    outputField.value = data.message;
+                    updateEncryptedDataDisplay({}); // Hide encrypted data display
+                }
+
+                // Update the summary table
+                updateSummaryTable(
+                    textInput.value,
+                    keyInput.value,
+                    outputField.value
+                );
+
+                // Update UI state
+                updateKeyLabel();
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error: ' + error.message);
+            });
+        });
+
+        // Set initial label state
+        updateKeyLabel();
+
+        // Add event listeners to radio buttons
+        encryptRadio.addEventListener('change', updateKeyLabel);
+        decryptRadio.addEventListener('change', updateKeyLabel);
+    });
+</script>
+{% endblock addedscript %}

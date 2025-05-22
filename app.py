@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, jsonify
 from symmetric import CaesarCipher, VernamCipher, BlockCipher
-from asymmetric import RSA
+from asymmetric import RSA, ECC
 
 app = Flask(__name__)
 
@@ -89,7 +89,7 @@ def block_cipher():
     return render_template("block.html", contents=contents)
 
 @app.route('/rsa', methods=['GET', 'POST'])
-def rsa_cipher():
+def rsa_encryption():
     contents = {
         'id': "#rsa",
         'title': "RSA Encryption",
@@ -124,20 +124,52 @@ def rsa_genkeys():
             'private_key': private_key
         })
     
-    return redirect(url_for('rsa_cipher'))
+    return redirect(url_for('rsa_encryption'))
 
-@app.route('/diffie-hellman', methods=['GET', 'POST'])
-def diffie_hellman():
-    if request.method == 'POST':
-        pass
-
+@app.route('/ecc', methods=['GET', 'POST'])
+def ecc_encryption():
     contents = {
-        'id': "#diffie-hellman",
-        'title': "Diffie-Hellman",
+        'id': "#ecc",
+        'title': "ECC Encryption",
         'type': "Asymmetric",
     }
 
-    return render_template("diffie-hellman.html", contents=contents)
+    if request.method == 'POST':
+        text = request.form.get('text-input')
+        key = request.form.get('key')
+        mode = request.form.get('mode')
+
+        if mode == 'encrypt':
+            encrypted_data =  ECC.encrypt(text, key)
+        else:
+            output = ECC.decrypt(encrypted_data, key) if encrypted_data else "Error: You must encrypt first."
+
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            if mode == 'encrypt':
+                return jsonify({
+                    'text': text,
+                    'used_key': key,
+                }.update(encrypted_data)) 
+            else:
+                return jsonify({
+                    'text': text,
+                    'used_key': key,
+                    'output': output
+                })
+
+    return render_template("ecc.html", contents=contents)
+
+@app.route('/ecc-genkey', methods=['GET', 'POST'])
+def ecc_genkeys():
+    private_key, public_key = ECC.generate_ecc_keypair()
+
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        return jsonify({
+            'public_key': public_key,
+            'private_key': private_key
+        })
+    
+    return redirect(url_for('ecc'))
 
 @app.route('/md5', methods=['GET', 'POST'])
 def md5():
@@ -191,6 +223,35 @@ def sha512():
 
     return render_template("sha512.html", contents=contents)
 
+@app.route('/ecc-encrypt', methods=['POST'])
+def ecc_encrypt():
+    try:
+        data = request.get_json()
+        message = data.get('message')
+        public_key = data.get('public_key')
+        
+        if not message or not public_key:
+            return jsonify({'error': 'Missing required parameters'}), 400
+            
+        encrypted_data = ECC.encrypt(message, public_key)
+        return jsonify(encrypted_data)
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/ecc-decrypt', methods=['POST'])
+def ecc_decrypt():
+    try:
+        data = request.get_json()
+        encrypted_data = data.get('encrypted_data')
+        private_key = data.get('private_key')
+        
+        if not encrypted_data or not private_key:
+            return jsonify({'error': 'Missing required parameters'}), 400
+            
+        decrypted_message = ECC.decrypt(encrypted_data, private_key)
+        return jsonify({'message': decrypted_message})
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 if __name__ == "__main__":
     app.run(debug=True, host='0.0.0.0', port=5000)
