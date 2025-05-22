@@ -260,7 +260,7 @@ def sha256():
         'type': "Hash",
     }
 
-    return render_template("sh256.html", contents=contents)
+    return render_template("sha256.html", contents=contents)
 
 @app.route('/sha512', methods=['GET', 'POST'])
 def sha512():
