@@ -42,3 +42,46 @@ class MD5Hash:
             return generated_hash.lower() == hash_to_verify.lower()
         except Exception:
             return False
+        
+class SHA1Hash:
+    """
+    Implementation of SHA-1 hashing algorithm.
+    """
+    
+    @staticmethod
+    def generate_hash(text: str) -> str:
+        """
+        Generates SHA-1 hash of input text.
+        
+        Args:
+            text: The input text to hash
+            
+        Returns:
+            A string containing the hexadecimal SHA-1 hash
+        """
+        try:
+            # Convert input to bytes and generate hash
+            message = text.encode('utf-8')
+            sha1_hash = hashlib.sha1()
+            sha1_hash.update(message)
+            return sha1_hash.hexdigest()
+        except Exception as e:
+            return f"Error generating hash: {str(e)}"
+    
+    @staticmethod
+    def verify_hash(text: str, hash_to_verify: str) -> bool:
+        """
+        Verifies if input text matches a given SHA-1 hash.
+        
+        Args:
+            text: The input text to check
+            hash_to_verify: The SHA-1 hash to verify against
+            
+        Returns:
+            Boolean indicating if the hashes match
+        """
+        try:
+            generated_hash = SHA1Hash.generate_hash(text)
+            return generated_hash.lower() == hash_to_verify.lower()
+        except Exception:
+            return False
