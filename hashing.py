@@ -85,3 +85,46 @@ class SHA1Hash:
             return generated_hash.lower() == hash_to_verify.lower()
         except Exception:
             return False
+        
+class SHA256Hash:
+    """
+    Implementation of SHA-256 hashing algorithm.
+    """
+    
+    @staticmethod
+    def generate_hash(text: str) -> str:
+        """
+        Generates SHA-256 hash of input text.
+        
+        Args:
+            text: The input text to hash
+            
+        Returns:
+            A string containing the hexadecimal SHA-256 hash
+        """
+        try:
+            # Convert input to bytes and generate hash
+            message = text.encode('utf-8')
+            sha256_hash = hashlib.sha256()
+            sha256_hash.update(message)
+            return sha256_hash.hexdigest()
+        except Exception as e:
+            return f"Error generating hash: {str(e)}"
+    
+    @staticmethod
+    def verify_hash(text: str, hash_to_verify: str) -> bool:
+        """
+        Verifies if input text matches a given SHA-256 hash.
+        
+        Args:
+            text: The input text to check
+            hash_to_verify: The SHA-256 hash to verify against
+            
+        Returns:
+            Boolean indicating if the hashes match
+        """
+        try:
+            generated_hash = SHA256Hash.generate_hash(text)
+            return generated_hash.lower() == hash_to_verify.lower()
+        except Exception:
+            return False
