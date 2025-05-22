@@ -1,0 +1,102 @@
+{% extends "main.html" %}
+
+{% block content %}
+<div class="container m-4">
+    <form id="md5Form">
+        <div class="row justify-content-evenly">
+            <div class="col-6">
+                <div class="field rounded-4 p-3">
+                    <label for="text-input">Text</label>
+                    <textarea id="text-input" name="text-input" class="form-control mt-2" placeholder="Enter text to hash..." required>{{ text if text }}</textarea>
+                    <br>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="field rounded-4 p-3">
+                    <label for="hash-output">MD5 Hash</label>
+                    <textarea id="hash-output" class="form-control mt-2" placeholder="Hash result..." readonly>{{ hash_output if hash_output }}</textarea>
+                    <br>
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-evenly my-3">
+            <div class="col-6">
+                <div class="field rounded-4 p-3">
+                    <label for="verify-hash">Verify Hash</label>
+                    <input type="text" id="verify-hash" name="verify-hash" class="form-control mt-2" placeholder="Enter hash to verify...">
+                    <div id="verification-result" class="mt-3 text-center"></div>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="field rounded-4 p-3 text-center">
+                    <input type="submit" class="btn mt-3 rounded-pill" value="Generate Hash">
+                    <button type="button" id="verify-btn" class="btn mt-3 rounded-pill ms-2">Verify Hash</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+{% endblock content %}
+
+{% block addedscript %}
+<script>
+    document.getElementById('md5Form').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const formData = new FormData(this);
+        
+        try {
+            const response = await fetch('/md5-hash', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            });
+            
+            const data = await response.json();
+            document.getElementById('hash-output').value = data.hash;
+            
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    });
+
+    document.getElementById('verify-btn').addEventListener('click', async function() {
+        const text = document.getElementById('text-input').value;
+        const hashToVerify = document.getElementById('verify-hash').value;
+        const verificationResult = document.getElementById('verification-result');
+
+        if (!text || !hashToVerify) {
+            verificationResult.innerHTML = '<div class="alert alert-warning">Please enter both text and hash to verify</div>';
+            return;
+        }
+
+        try {
+            const response = await fetch('/verify-md5', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                body: JSON.stringify({
+                    text: text,
+                    hash: hashToVerify
+                })
+            });
+            
+            const data = await response.json();
+            
+            if (data.match) {
+                verificationResult.innerHTML = '<div class="alert alert-success">Hash Verified ✓</div>';
+            } else {
+                verificationResult.innerHTML = '<div class="alert alert-danger">Hash Does Not Match ✗</div>';
+            }
+            
+        } catch (error) {
+            console.error('Error:', error);
+            verificationResult.innerHTML = '<div class="alert alert-danger">Error verifying hash</div>';
+        }
+    });
+</script>
+{% endblock addedscript %}
