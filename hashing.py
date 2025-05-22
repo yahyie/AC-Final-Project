@@ -1,0 +1,44 @@
+import hashlib
+
+class MD5Hash:
+    """
+    Implementation of MD5 hashing algorithm.
+    """
+    
+    @staticmethod
+    def generate_hash(text: str) -> str:
+        """
+        Generates MD5 hash of input text.
+        
+        Args:
+            text: The input text to hash
+            
+        Returns:
+            A string containing the hexadecimal MD5 hash
+        """
+        try:
+            # Convert input to bytes and generate hash
+            message = text.encode('utf-8')
+            md5_hash = hashlib.md5()
+            md5_hash.update(message)
+            return md5_hash.hexdigest()
+        except Exception as e:
+            return f"Error generating hash: {str(e)}"
+    
+    @staticmethod
+    def verify_hash(text: str, hash_to_verify: str) -> bool:
+        """
+        Verifies if input text matches a given MD5 hash.
+        
+        Args:
+            text: The input text to check
+            hash_to_verify: The MD5 hash to verify against
+            
+        Returns:
+            Boolean indicating if the hashes match
+        """
+        try:
+            generated_hash = MD5Hash.generate_hash(text)
+            return generated_hash.lower() == hash_to_verify.lower()
+        except Exception:
+            return False
