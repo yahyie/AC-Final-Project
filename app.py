@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, jsonify
 from symmetric import CaesarCipher, VernamCipher, BlockCipher
 from asymmetric import RSA, ECC
+from hashing import MD5Hash
 
 app = Flask(__name__)
 
@@ -173,9 +174,6 @@ def ecc_genkeys():
 
 @app.route('/md5', methods=['GET', 'POST'])
 def md5():
-    if request.method == 'POST':
-        pass
-
     contents = {
         'id': "#md5",
         'title': "MD5",
@@ -183,6 +181,35 @@ def md5():
     }
 
     return render_template("md5.html", contents=contents)
+
+@app.route('/md5-hash', methods=['POST'])
+def md5_hash():
+    if request.method == 'POST':
+        text = request.form.get('text-input')
+        hash_result = MD5Hash.generate_hash(text)
+
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            return jsonify({
+                'text': text,
+                'hash': hash_result
+            })
+    
+    return redirect(url_for('md5'))
+
+@app.route('/verify-md5', methods=['POST'])
+def verify_md5():
+    try:
+        data = request.get_json()
+        text = data.get('text')
+        hash_to_verify = data.get('hash')
+        
+        if not text or not hash_to_verify:
+            return jsonify({'error': 'Missing required parameters'}), 400
+            
+        is_match = MD5Hash.verify_hash(text, hash_to_verify)
+        return jsonify({'match': is_match})
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 @app.route('/sha1', methods=['GET', 'POST'])
 def sha1():
