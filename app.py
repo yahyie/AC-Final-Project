@@ -172,6 +172,36 @@ def ecc_genkeys():
     
     return redirect(url_for('ecc'))
 
+@app.route('/ecc-encrypt', methods=['POST'])
+def ecc_encrypt():
+    try:
+        data = request.get_json()
+        message = data.get('message')
+        public_key = data.get('public_key')
+        
+        if not message or not public_key:
+            return jsonify({'error': 'Missing required parameters'}), 400
+            
+        encrypted_data = ECC.encrypt(message, public_key)
+        return jsonify(encrypted_data)
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/ecc-decrypt', methods=['POST'])
+def ecc_decrypt():
+    try:
+        data = request.get_json()
+        encrypted_data = data.get('encrypted_data')
+        private_key = data.get('private_key')
+        
+        if not encrypted_data or not private_key:
+            return jsonify({'error': 'Missing required parameters'}), 400
+            
+        decrypted_message = ECC.decrypt(encrypted_data, private_key)
+        return jsonify({'message': decrypted_message})
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
 @app.route('/md5', methods=['GET', 'POST'])
 def md5():
     contents = {
@@ -322,36 +352,6 @@ def verify_sha512():
             
         is_match = SHA512Hash.verify_hash(text, hash_to_verify)
         return jsonify({'match': is_match})
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
-
-@app.route('/ecc-encrypt', methods=['POST'])
-def ecc_encrypt():
-    try:
-        data = request.get_json()
-        message = data.get('message')
-        public_key = data.get('public_key')
-        
-        if not message or not public_key:
-            return jsonify({'error': 'Missing required parameters'}), 400
-            
-        encrypted_data = ECC.encrypt(message, public_key)
-        return jsonify(encrypted_data)
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
-
-@app.route('/ecc-decrypt', methods=['POST'])
-def ecc_decrypt():
-    try:
-        data = request.get_json()
-        encrypted_data = data.get('encrypted_data')
-        private_key = data.get('private_key')
-        
-        if not encrypted_data or not private_key:
-            return jsonify({'error': 'Missing required parameters'}), 400
-            
-        decrypted_message = ECC.decrypt(encrypted_data, private_key)
-        return jsonify({'message': decrypted_message})
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
