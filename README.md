@@ -310,7 +310,7 @@ This section will include screen snippets (screenshots) or text-based output exa
     * Input Text: `Hello CipherNest`
     * Hash to Verify: `8d6f9b9198b357b45dd69342679f08f3`
     * Output: `Hash Verified ✓`
-    * (Placeholder for Screenshot: `md5_verification_screenshot.png`)
+      [`md5_verification_screenshot.png`)](https://github.com/yahyie/AC-Final-Project/blob/ccb68fd388b7760c88240752879d3a85199b4e14/Screenshots/%20MD5.png)
 
 #### SHA-1 Hashing:
 * **Generate Hash:**
