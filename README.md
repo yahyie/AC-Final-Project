@@ -269,7 +269,7 @@ This section will include screen snippets (screenshots) or text-based output exa
     * Input Hex Text: `1F 0A 1C 1A 1B 0A 1C 0B`
     * Key: `MYSECRET`
     * Output: `TESTTEXT`
-    [`block_decryption_screenshot.png`](https://github.com/yahyie/AC-Final-Project/blob/main/Screenshots/BlockCipher.png?raw=true)
+      [block_decryption_screenshot.png](https://github.com/yahyie/AC-Final-Project/blob/main/Screenshots/BlockCipher.png?raw=true)
 
 #### RSA Encryption:
 * **Key Generation:**
