@@ -1,4 +1,6 @@
 # 🔐 CipherNest 🔐
+![block_decryption_screenshot.png](https://github.com/yahyie/AC-Final-Project/blob/main/Screenshots/Home.png?raw=true)
+
 
 #### BSCS 3A
 #### Applied Cryptography CSAC 329 Cryptographic Application
@@ -245,7 +247,7 @@ This section will include screen snippets (screenshots) or text-based output exa
     * Input Text: `KHOOR ZRUOG`
     * Shift Keys: `3`
     * Output: `HELLO WORLD`
-    * (Placeholder for Screenshot: `caesar_decryption_screenshot.png`)
+       ![block_decryption_screenshot.png](https://github.com/yahyie/AC-Final-Project/blob/main/Screenshots/CaesarCipher.png?raw=true)
 
 #### Vernam Cipher:
 * **Encryption:**
@@ -257,7 +259,7 @@ This section will include screen snippets (screenshots) or text-based output exa
     * Input Ciphertext (Decimal): `959627`
     * Key: `123456`
     * Output Plaintext: `HI`
-    * (Placeholder for Screenshot: `vernam_decryption_screenshot.png`)
+       *![block_decryption_screenshot.png](https://github.com/yahyie/AC-Final-Project/blob/main/Screenshots/VernamCipher.png?raw=true)
 
 #### Block Cipher (Custom XOR):
 * **Encryption:**
@@ -269,7 +271,7 @@ This section will include screen snippets (screenshots) or text-based output exa
     * Input Hex Text: `1F 0A 1C 1A 1B 0A 1C 0B`
     * Key: `MYSECRET`
     * Output: `TESTTEXT`
-      [block_decryption_screenshot.png](https://github.com/yahyie/AC-Final-Project/blob/main/Screenshots/BlockCipher.png?raw=true)
+      ![block_decryption_screenshot.png](https://github.com/yahyie/AC-Final-Project/blob/main/Screenshots/BlockCipher.png?raw=true)
 
 #### RSA Encryption:
 * **Key Generation:**
@@ -284,7 +286,7 @@ This section will include screen snippets (screenshots) or text-based output exa
     * Input Ciphertext: (Paste Base64 encoded ciphertext)
     * Private Key: (Paste generated Private Key)
     * Output: `SECRETMSG`
-    * (Placeholder for Screenshot: `rsa_decryption_screenshot.png`)
+       ![block_decryption_screenshot.png](https://github.com/yahyie/AC-Final-Project/blob/main/Screenshots/RSAEncryption.png?raw=true)
 
 #### ECC Encryption:
 * **Key Generation:**
@@ -299,7 +301,7 @@ This section will include screen snippets (screenshots) or text-based output exa
     * Input Encrypted Data (Ephemeral PubKey, Nonce, Ciphertext): (Paste corresponding parts)
     * Recipient's Private Key: (Paste generated Private Key)
     * Output: `ECC TEST`
-    * (Placeholder for Screenshot: `ecc_decryption_screenshot.png`)
+       ![block_decryption_screenshot.png](https://github.com/yahyie/AC-Final-Project/blob/main/Screenshots/ECCEncryption.png?raw=true)
 
 #### MD5 Hashing:
 * **Generate Hash:**
@@ -310,24 +312,27 @@ This section will include screen snippets (screenshots) or text-based output exa
     * Input Text: `Hello CipherNest`
     * Hash to Verify: `8d6f9b9198b357b45dd69342679f08f3`
     * Output: `Hash Verified ✓`
-      [`md5_verification_screenshot.png`](https://github.com/yahyie/AC-Final-Project/blob/main/Screenshots/MD5.png?raw=true)
+      ![block_decryption_screenshot.png](https://github.com/yahyie/AC-Final-Project/blob/main/Screenshots/MD5.png?raw=true)
 
 #### SHA-1 Hashing:
 * **Generate Hash:**
     * Input Text: `Hello CipherNest`
     * Output Hash: (e.g., `a9b81e5c6f87a901a8c46c3b7b878876c53512d5`)
-    * (Placeholder for Screenshot: `sha1_hashing_screenshot.png`)
+    ![block_decryption_screenshot.png](https://github.com/yahyie/AC-Final-Project/blob/main/Screenshots/SHA-1.png?raw=true)
 
 #### SHA-256 Hashing:
 * **Generate Hash:**
     * Input Text: `Hello CipherNest`
     * Output Hash: (e.g., `d18e2a3d2c0423992bf78f683594e5b192f1b8183d08c87465219844c1c99a87`)
-    * (Placeholder for Screenshot: `sha256_hashing_screenshot.png`)
+  ![SHA-256](https://github.com/yahyie/AC-Final-Project/blob/main/Screenshots/SHA-256.png?raw=true)
 
 #### SHA-512 Hashing:
 * **Generate Hash:**
     * Input Text: `Hello CipherNest`
     * Output Hash: (e.g., `1e7b9a3f...` long hash)
-    * (Placeholder for Screenshot: `sha512_hashing_screenshot.png`)
+       ![SHA-256](https://github.com/yahyie/AC-Final-Project/blob/main/Screenshots/SHA-512.png?raw=true)
 
 ---
+
+
+
